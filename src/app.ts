@@ -1,6 +1,7 @@
 import express, { Application } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import globalErrorHandler from "./middleware/globalErrorHandler";
 
 const app: Application = express();
 
@@ -19,5 +20,7 @@ app.use(cookieParser());
 app.get("/", (req, res) => {
   res.send("Your server is running");
 });
+
+app.use(globalErrorHandler);
 
 export default app;
