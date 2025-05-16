@@ -24,8 +24,8 @@ const userModel = new Schema<IUser>(
       default: "job_seeker",
     },
     company: {
-      type: String,
-      required: false,
+      type: Schema.Types.ObjectId,
+      ref: "Company",
     },
   },
   { timestamps: true }
