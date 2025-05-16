@@ -59,6 +59,10 @@ const userSchema = new Schema<IUser>(
       type: Schema.Types.ObjectId,
       ref: "Company",
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

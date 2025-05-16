@@ -38,6 +38,28 @@ const registerValidationSchema = z.object({
   }),
 });
 
+const updateUserRoleValidationSchema = z.object({
+  body: z.object({
+    role: z.enum(["admin", "employee", "job_seeker"]),
+  }),
+});
+
+const createEmployee = z.object({
+  body: z.object({
+    name: nameValidationSchema,
+    email: z.string({
+      required_error: "Email is required",
+    }),
+    password: z
+      .string({
+        required_error: "Password is required",
+      })
+      .min(6, "Password must be at least 6 characters"),
+  }),
+});
+
 export const userValidationSchema = {
   registerValidationSchema,
+  updateUserRoleValidationSchema,
+  createEmployee,
 };
