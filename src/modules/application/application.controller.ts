@@ -19,6 +19,17 @@ const applyApplication = catchAsync(async (req, res) => {
   });
 });
 
+const getAllApplications = catchAsync(async (req, res) => {
+  const result = await applicationService.getAllApplicationsFromDB();
+
+  sendResonse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Application fetched successfully",
+    data: result,
+  });
+});
+
 const getMyOwnApplications = catchAsync(async (req, res) => {
   const { userId } = req.user;
   const result = await applicationService.getMyOwnApplications(userId);
@@ -31,7 +42,27 @@ const getMyOwnApplications = catchAsync(async (req, res) => {
   });
 });
 
+const updateApplicationStatus = catchAsync(async (req, res) => {
+  const { applicationId } = req.params;
+  const { status } = req.body;
+  const { userId } = req.user;
+  const result = await applicationService.updateApplicationStatus(
+    applicationId,
+    status,
+    userId
+  );
+
+  sendResonse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Application status updated successfully",
+    data: result,
+  });
+});
+
 export const applicationController = {
   applyApplication,
   getMyOwnApplications,
+  getAllApplications,
+  updateApplicationStatus,
 };

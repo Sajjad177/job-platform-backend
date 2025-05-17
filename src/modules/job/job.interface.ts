@@ -5,7 +5,7 @@ export interface TJob {
   description: string;
   requirements: string[];
   company: Types.ObjectId;
-  postedBy: Types.ObjectId;
+  postedBy: Types.ObjectId | string;
   isDeleted?: boolean;
   // status?: string;
 }

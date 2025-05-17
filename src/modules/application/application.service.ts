@@ -55,6 +55,13 @@ const applyApplicationToJob = async (
   return application;
 };
 
+const getAllApplicationsFromDB = async () => {
+  const applications = await Application.find()
+    .populate("jobId")
+    .populate({ path: "applicantId", select: "-password" });
+  return applications;
+};
+
 const getMyOwnApplications = async (userId: string) => {
   const applications = await Application.find({ applicantId: userId })
     .populate("jobId")
@@ -63,7 +70,42 @@ const getMyOwnApplications = async (userId: string) => {
   return applications;
 };
 
+const updateApplicationStatus = async (
+  applicationId: string,
+  status: string,
+  userId: string
+) => {
+  const application = await Application.findById(applicationId).populate({
+    path: "jobId",
+    select: "postedBy",
+  });
+  if (!application) {
+    throw new AppError("Application not found", StatusCodes.NOT_FOUND);
+  }
+
+  const job = application.jobId as any;
+  const employeeId = job.postedBy.toString();
+
+  if (employeeId !== userId) {
+    throw new AppError(
+      `You are not employee of this company`,
+      StatusCodes.CONFLICT
+    );
+  }
+
+  const result = await Application.findByIdAndUpdate(
+    applicationId,
+    { status },
+    {
+      new: true,
+    }
+  );
+  return result;
+};
+
 export const applicationService = {
   applyApplicationToJob,
+  getAllApplicationsFromDB,
   getMyOwnApplications,
+  updateApplicationStatus,
 };

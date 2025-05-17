@@ -19,9 +19,24 @@ router.post(
 );
 
 router.get(
+  "/",
+  auth(USER_ROLE.EMPLOYEE),
+  applicationController.getAllApplications
+);
+
+router.get(
   "/my-applications",
   auth(USER_ROLE.JOB_SEEKER),
   applicationController.getMyOwnApplications
+);
+
+router.put(
+  "/:applicationId",
+  auth(USER_ROLE.EMPLOYEE),
+  validateRequest(
+    applicationValidationSchema.updateApplicationStatusValidation
+  ),
+  applicationController.updateApplicationStatus
 );
 
 export const applicationRouter = router;

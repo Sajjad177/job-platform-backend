@@ -6,6 +6,13 @@ const applyApplicationValidation = z.object({
   }),
 });
 
+const updateApplicationStatusValidation = z.object({
+  body: z.object({
+    status: z.enum(["pending", "accepted", "rejected"]),
+  }),
+});
+
 export const applicationValidationSchema = {
   applyApplicationValidation,
+  updateApplicationStatusValidation,
 };
