@@ -29,4 +29,10 @@ router.put(
   jobController.updateJob
 );
 
+router.patch(
+  "/delete/:jobId",
+  auth(USER_ROLE.EMPLOYEE),
+  jobController.deleteJob
+);
+
 export const jobRouter = router;

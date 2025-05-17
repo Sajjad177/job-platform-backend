@@ -24,10 +24,9 @@ const jobSchema = new Schema<TJob>({
     ref: "User",
     required: [true, "User is required"],
   },
-  status: {
-    type: String,
-    enum: ["active", "inactive", "deleted"],
-    default: "active",
+  isDeleted: {
+    type: Boolean,
+    default: false,
   },
 });
 
