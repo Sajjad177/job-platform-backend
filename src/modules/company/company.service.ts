@@ -6,6 +6,12 @@ import { User } from "../user/user.model";
 import { TUser } from "../user/user.interface";
 
 const createCompanyInDB = async (payload: TCompany) => {
+  //Check if company already exists by name
+  const existingCompany = await Company.findOne({
+    name: payload.name,
+  }).populate<{ employees: TUser[] }>("employees", "name email");
+
+  // check if employees are already assigned elsewhere
   const existingCompanies = await Company.find({
     employees: { $in: payload.employees },
   }).populate<{ employees: TUser[] }>("employees", "name email");
@@ -32,29 +38,50 @@ const createCompanyInDB = async (payload: TCompany) => {
     throw new AppError(conflictMessages.join(", "), StatusCodes.CONFLICT);
   }
 
-  // Check roles of employees before assigning
-  const assignedUsers = await User.find({ _id: { $in: payload.employees } });
-
-  const invalidRoleUsers = assignedUsers.filter(
-    (user) => user.role !== "employee"
-  );
+  // check if all employees are employees
+  const users = await User.find({ _id: { $in: payload.employees } });
+  const invalidRoleUsers = users.filter((user) => user.role !== "employee");
 
   if (invalidRoleUsers.length > 0) {
     const roleErrors = invalidRoleUsers.map(
       (user) => `${user.name?.firstName} which is not allowed`
     );
-
     throw new AppError(
       `Only employees allowed, ${roleErrors.join(", ")}`,
       StatusCodes.BAD_REQUEST
     );
   }
 
-  const company = await Company.create(payload);
-  await company.populate("employees");
+  let company;
+
+  // chcecking if company already exists
+  if (existingCompany) {
+    const newEmployees = payload.employees.filter(
+      (id) =>
+        !existingCompany.employees.some(
+          (emp) => emp._id.toString() === id.toString()
+        )
+    );
+
+    // update existing company and add new employees
+    company = await Company.findByIdAndUpdate(
+      existingCompany._id,
+      { $addToSet: { employees: { $each: newEmployees } } },
+      { new: true }
+    ).populate("employees");
+  } else {
+    // if company doesn't exist then create new one
+    company = (await Company.create(payload)).populate("employees");
+  }
   return company;
+};
+
+const getAllCompanyFromDB = async () => {
+  const result = await Company.find({ isDeleted: false }).populate("employees");
+  return result;
 };
 
 export const companyService = {
   createCompanyInDB,
+  getAllCompanyFromDB,
 };

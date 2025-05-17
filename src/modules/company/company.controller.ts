@@ -14,6 +14,18 @@ const createCompany = catchAsync(async (req, res) => {
   });
 });
 
+const getAllCompany = catchAsync(async (req, res) => {
+  const result = await companyService.getAllCompanyFromDB();
+
+  sendResonse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Company fetched successfully",
+    data: result,
+  });
+});
+
 export const companyController = {
   createCompany,
+  getAllCompany,
 };
