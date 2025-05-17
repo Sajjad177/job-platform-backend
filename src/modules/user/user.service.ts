@@ -48,8 +48,26 @@ const createEmployeeInDB = async (payload: TUser) => {
   return user;
 };
 
-const getAllUserFromDB = async () => {
-  const result = await User.find({ isDeleted: false }).select("-password");
+const getAllUserFromDB = async (filter: { role?: string }) => {
+  const matchStage: any = {
+    isDeleted: false,
+  };
+
+  if (filter.role) {
+    matchStage.role = filter.role;
+  }
+
+  const result = await User.aggregate([
+    {
+      $match: matchStage,
+    },
+    {
+      $project: {
+        password: 0,
+      },
+    },
+  ]);
+
   return result;
 };
 

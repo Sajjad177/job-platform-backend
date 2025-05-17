@@ -29,7 +29,9 @@ const createEmployee = catchAsync(async (req, res) => {
 });
 
 const getAllUser = catchAsync(async (req, res) => {
-  const result = await userService.getAllUserFromDB();
+  const role = req.query.role as string | undefined;
+
+  const result = await userService.getAllUserFromDB({ role });
   sendResonse(res, {
     statusCode: StatusCodes.OK,
     success: true,

@@ -6,7 +6,6 @@ import { User } from "../user/user.model";
 import { TUser } from "../user/user.interface";
 
 const createCompanyInDB = async (payload: TCompany) => {
-  //Check if company already exists by name
   const existingCompany = await Company.findOne({
     name: payload.name,
   }).populate<{ employees: TUser[] }>("employees", "name email");
@@ -70,7 +69,6 @@ const createCompanyInDB = async (payload: TCompany) => {
       { new: true }
     ).populate("employees");
   } else {
-    // if company doesn't exist then create new one
     company = (await Company.create(payload)).populate("employees");
   }
   return company;
