@@ -6,7 +6,8 @@ export type TUserName = {
   lastName: string;
 };
 
-export interface IUser {
+export interface TUser {
+  _id: Types.ObjectId;
   name: TUserName;
   email: string;
   password: string;

@@ -1,11 +1,11 @@
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../errors/AppError";
-import { IUser } from "./user.interface";
+import { TUser } from "./user.interface";
 import { User } from "./user.model";
 import { createToken } from "../../utils/tokenGenerate";
 import config from "../../config";
 
-const registerUserIntoDB = async (payload: IUser) => {
+const registerUserIntoDB = async (payload: TUser) => {
   const isExist = await User.findOne({ email: payload.email });
   if (isExist) {
     throw new AppError("User already exist", StatusCodes.CONFLICT);
@@ -35,7 +35,7 @@ const registerUserIntoDB = async (payload: IUser) => {
   };
 };
 
-const createEmployeeInDB = async (payload: IUser) => {
+const createEmployeeInDB = async (payload: TUser) => {
   const isExist = await User.findOne({ email: payload.email });
   if (isExist) {
     throw new AppError("Employee already exist", StatusCodes.CONFLICT);
