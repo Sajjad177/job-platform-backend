@@ -55,19 +55,75 @@ const applyApplicationToJob = async (
   return application;
 };
 
-const getAllApplicationsFromDB = async () => {
-  const applications = await Application.find()
-    .populate("jobId")
-    .populate({ path: "applicantId", select: "-password" });
-  return applications;
+const getAllApplicationsFromDB = async (filter: {
+  company?: string;
+  status?: string;
+}) => {
+  const matchStage: any = {};
+
+  if (filter.status) {
+    matchStage.status = filter.status;
+  }
+
+  const aggregatePipeline: any[] = [
+    {
+      $lookup: {
+        from: "jobs",
+        localField: "jobId",
+        foreignField: "_id",
+        as: "job",
+      },
+    },
+    { $unwind: "$job" },
+
+    {
+      $lookup: {
+        from: "companies",
+        localField: "job.company",
+        foreignField: "_id",
+        as: "company",
+      },
+    },
+    { $unwind: "$company" },
+  ];
+
+  if (filter.company) {
+    matchStage["company.name"] = filter.company;
+  }
+
+  // Apply filters
+  if (Object.keys(matchStage).length > 0) {
+    aggregatePipeline.push({ $match: matchStage });
+  }
+
+  // Lookup applicant (user)
+  aggregatePipeline.push({
+    $lookup: {
+      from: "users",
+      localField: "applicantId",
+      foreignField: "_id",
+      as: "applicant",
+    },
+  });
+  aggregatePipeline.push({ $unwind: "$applicant" });
+
+  // Remove password
+  aggregatePipeline.push({
+    $project: {
+      "applicant.password": 0,
+    },
+  });
+
+  const result = await Application.aggregate(aggregatePipeline);
+  return result;
 };
 
 const getMyOwnApplications = async (userId: string) => {
-  const applications = await Application.find({ applicantId: userId })
+  const result = await Application.find({ applicantId: userId })
     .populate("jobId")
     .populate({ path: "applicantId", select: "-password" });
 
-  return applications;
+  return result;
 };
 
 const updateApplicationStatus = async (

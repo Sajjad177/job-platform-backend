@@ -20,7 +20,7 @@ router.post(
 
 router.get(
   "/",
-  auth(USER_ROLE.EMPLOYEE),
+  auth(USER_ROLE.EMPLOYEE, USER_ROLE.ADMIN),
   applicationController.getAllApplications
 );
 

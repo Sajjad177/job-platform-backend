@@ -20,7 +20,13 @@ const applyApplication = catchAsync(async (req, res) => {
 });
 
 const getAllApplications = catchAsync(async (req, res) => {
-  const result = await applicationService.getAllApplicationsFromDB();
+  const company = req.query.company as string | undefined;
+  const status = req.query.status as string | undefined;
+
+  const result = await applicationService.getAllApplicationsFromDB({
+    company,
+    status,
+  });
 
   sendResonse(res, {
     statusCode: StatusCodes.OK,
