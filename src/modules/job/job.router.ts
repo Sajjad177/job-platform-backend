@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post(
   "/create-job",
-  auth(USER_ROLE.EMPLOYEE),
+  auth(USER_ROLE.EMPLOYEE, USER_ROLE.ADMIN),
   validateRequest(jobValidation.createJobValidation),
   jobController.createJob
 );
@@ -18,20 +18,20 @@ router.get("/", jobController.getAllJobs);
 
 router.get(
   "/my-posted-jobs",
-  auth(USER_ROLE.EMPLOYEE),
+  auth(USER_ROLE.EMPLOYEE, USER_ROLE.ADMIN),
   jobController.getOwnPostedJobs
 );
 
 router.put(
   "/:jobId",
-  auth(USER_ROLE.EMPLOYEE),
+  auth(USER_ROLE.EMPLOYEE, USER_ROLE.ADMIN),
   validateRequest(jobValidation.updateJobValidation),
   jobController.updateJob
 );
 
 router.patch(
   "/delete/:jobId",
-  auth(USER_ROLE.EMPLOYEE),
+  auth(USER_ROLE.EMPLOYEE, USER_ROLE.ADMIN),
   jobController.deleteJob
 );
 
