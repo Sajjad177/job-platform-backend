@@ -8,8 +8,15 @@ const createJobValidation = z.object({
       z.string({ required_error: "Requirements are required" })
     ),
     company: z.string({ required_error: "Company is required" }),
-    // postedBy: z.string({ required_error: "User is required" }),
   }),
 });
 
-export const jobValidation = { createJobValidation };
+const updateJobValidation = z.object({
+  body: z.object({
+    title: z.string().optional(),
+    description: z.string().optional(),
+    requirements: z.array(z.string()).optional(),
+  }),
+});
+
+export const jobValidation = { createJobValidation, updateJobValidation };

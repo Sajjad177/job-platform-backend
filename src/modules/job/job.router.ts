@@ -16,4 +16,17 @@ router.post(
 
 router.get("/", jobController.getAllJobs);
 
+router.get(
+  "/my-posted-jobs",
+  auth(USER_ROLE.EMPLOYEE),
+  jobController.getOwnPostedJobs
+);
+
+router.put(
+  "/:jobId",
+  auth(USER_ROLE.EMPLOYEE),
+  validateRequest(jobValidation.updateJobValidation),
+  jobController.updateJob
+);
+
 export const jobRouter = router;

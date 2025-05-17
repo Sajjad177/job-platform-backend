@@ -26,7 +26,34 @@ const getAllJobs = catchAsync(async (req, res) => {
   });
 });
 
+const getOwnPostedJobs = catchAsync(async (req, res) => {
+  const { userId } = req.user;
+  const result = await jobService.getOwnPostedJobs(userId);
+
+  sendResonse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Job get successfully",
+    data: result,
+  });
+});
+
+const updateJob = catchAsync(async (req, res) => {
+  const { jobId } = req.params;
+  const { userId } = req.user;
+  const result = await jobService.updateJobInDB(jobId, req.body, userId);
+
+  sendResonse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Job updated successfully",
+    data: result,
+  });
+});
+
 export const jobController = {
   createJob,
   getAllJobs,
+  getOwnPostedJobs,
+  updateJob,
 };

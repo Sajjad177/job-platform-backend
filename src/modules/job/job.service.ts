@@ -57,7 +57,41 @@ const getAllJobs = async () => {
   return result;
 };
 
+const getOwnPostedJobs = async (userId: string) => {
+  const result = await Job.find({ postedBy: userId }).populate("company");
+  return result;
+};
+
+const updateJobInDB = async (jobId: string, payload: TJob, userId: string) => {
+  const isExist = await Job.findById(jobId);
+  if (!isExist) {
+    throw new AppError("Job not found", StatusCodes.NOT_FOUND);
+  }
+
+  const checkJob = await Job.findOne({ isDeleted: true });
+  if (checkJob) {
+    throw new AppError("Job already deleted", StatusCodes.CONFLICT);
+  }
+
+  const employeeId = isExist.postedBy.toString();
+//   const companyId = isExist.company.toString();
+
+  if (employeeId !== userId) {
+    throw new AppError(
+      `You are not employee of this company`,
+      StatusCodes.CONFLICT
+    );
+  }
+
+  const result = await Job.findByIdAndUpdate(jobId, payload, {
+    new: true,
+  }).populate("company postedBy");
+  return result;
+};
+
 export const jobService = {
   createJobInDB,
   getAllJobs,
+  getOwnPostedJobs,
+  updateJobInDB,
 };
