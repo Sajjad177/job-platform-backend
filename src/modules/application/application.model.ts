@@ -40,7 +40,7 @@ const applicationSchema = new Schema<TApplication>({
   },
 });
 
-export const application = model<TApplication>(
+export const Application = model<TApplication>(
   "Application",
   applicationSchema
 );
