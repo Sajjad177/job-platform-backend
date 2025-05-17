@@ -4,7 +4,8 @@ import auth from "../../middleware/auth";
 import { USER_ROLE } from "../user/user.constant";
 import { parseBody } from "../../middleware/parserBody";
 import upload from "../../config/multer.config";
-
+import validateRequest from "../../middleware/validateRequest";
+import { applicationValidationSchema } from "./application.validation";
 
 const router = express.Router();
 
@@ -13,6 +14,7 @@ router.post(
   upload.single("file"),
   parseBody,
   auth(USER_ROLE.JOB_SEEKER),
+  validateRequest(applicationValidationSchema.applyApplicationValidation),
   applicationController.applyApplication
 );
 

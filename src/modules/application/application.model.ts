@@ -12,11 +12,9 @@ const applicationSchema = new Schema<TApplication>({
     ref: "User",
     required: [true, "Applicant is required"],
   },
-  cv: {
+  document: {
     type: String,
-  },
-  resume: {
-    type: String,
+    required: [true, "Document is required"],
   },
   paymentStatus: {
     type: String,

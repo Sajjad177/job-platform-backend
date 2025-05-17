@@ -28,7 +28,7 @@ const applyApplicationToJob = async (
 
   const checkPaid = await Payment.findOne({
     user: userId,
-    amount: 100,
+    jobId: payload.jobId,
   });
   if (!checkPaid) {
     throw new AppError("You have to paid first", StatusCodes.CONFLICT);
@@ -41,8 +41,7 @@ const applyApplicationToJob = async (
   const application = await Application.create({
     jobId: payload.jobId,
     applicantId: userId,
-    cv: file?.path,
-    resume: file?.path,
+    document: file?.path,
     paymentStatus: "paid",
     status: "pending",
     invoice: {

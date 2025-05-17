@@ -3,8 +3,9 @@ import AppError from "../../errors/AppError";
 import { User } from "../user/user.model";
 import { Payment } from "./payment.model";
 import mongoose from "mongoose";
+import { TPayment } from "./payment.interface";
 
-const initiatePayment = async (userId: string) => {
+const initiatePayment = async (userId: string, payload: TPayment) => {
   const user = await User.findById(userId);
   if (!user) {
     throw new AppError("User not found", StatusCodes.NOT_FOUND);
@@ -14,7 +15,7 @@ const initiatePayment = async (userId: string) => {
 
   const payment = await Payment.create({
     user: userId,
-    application: null,
+    jobId: payload.jobId,
     amount: 100,
     transactionId,
   });

@@ -1,15 +1,16 @@
 import { Schema, model } from "mongoose";
+import { TPayment } from "./payment.interface";
 
-const paymentSchema = new Schema({
+const paymentSchema = new Schema<TPayment>({
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  application: {
+  jobId: {
     type: Schema.Types.ObjectId,
-    ref: "Application",
-    default: null,
+    ref: "Job",
+    required: true,
   },
   amount: {
     type: Number,
