@@ -12,4 +12,9 @@ export default {
     jwtAccessTokenSecret: process.env.JWT_ACCESS_TOKEN_SECRET,
     jwtAccessTokenExpiresIn: process.env.JWT_ACCESS_EXPIRES_IN,
   },
+
+  admin: {
+    adminEmail: process.env.ADMIN_EMAIL,
+    adminPassword: process.env.ADMIN_PASSWORD,
+  },
 };
