@@ -25,6 +25,8 @@ const getAllCompany = catchAsync(async (req, res) => {
   });
 });
 
+const deleteCompany = catchAsync(async (req, res) => {});
+
 export const companyController = {
   createCompany,
   getAllCompany,
