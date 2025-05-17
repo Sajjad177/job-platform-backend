@@ -19,6 +19,19 @@ const applyApplication = catchAsync(async (req, res) => {
   });
 });
 
+const getMyOwnApplications = catchAsync(async (req, res) => {
+  const { userId } = req.user;
+  const result = await applicationService.getMyOwnApplications(userId);
+
+  sendResonse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Application fetched successfully",
+    data: result,
+  });
+});
+
 export const applicationController = {
   applyApplication,
+  getMyOwnApplications,
 };

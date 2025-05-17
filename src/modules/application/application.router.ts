@@ -18,4 +18,10 @@ router.post(
   applicationController.applyApplication
 );
 
+router.get(
+  "/my-applications",
+  auth(USER_ROLE.JOB_SEEKER),
+  applicationController.getMyOwnApplications
+);
+
 export const applicationRouter = router;

@@ -55,6 +55,15 @@ const applyApplicationToJob = async (
   return application;
 };
 
+const getMyOwnApplications = async (userId: string) => {
+  const applications = await Application.find({ applicantId: userId })
+    .populate("jobId")
+    .populate({ path: "applicantId", select: "-password" });
+
+  return applications;
+};
+
 export const applicationService = {
   applyApplicationToJob,
+  getMyOwnApplications,
 };
