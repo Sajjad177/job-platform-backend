@@ -7,5 +7,4 @@ export interface TJob {
   company: Types.ObjectId;
   postedBy: Types.ObjectId | string;
   isDeleted?: boolean;
-  // status?: string;
 }

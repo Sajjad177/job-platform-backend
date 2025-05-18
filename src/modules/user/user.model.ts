@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { IUser, TUserName } from "./user.interface";
+import { TUser, TUserName } from "./user.interface";
 import bcrypt from "bcrypt";
 import config from "../../config";
 import validator from "validator";
@@ -35,7 +35,7 @@ const userNameModel = new Schema<TUserName>({
 });
 
 // User Schema
-const userSchema = new Schema<IUser>(
+const userSchema = new Schema<TUser>(
   {
     name: {
       type: userNameModel,
@@ -54,10 +54,6 @@ const userSchema = new Schema<IUser>(
       type: String,
       enum: ["admin", "employee", "job_seeker"],
       default: "job_seeker",
-    },
-    company: {
-      type: Schema.Types.ObjectId,
-      ref: "Company",
     },
     isDeleted: {
       type: Boolean,
@@ -85,10 +81,10 @@ userSchema.pre("save", async function (next) {
 });
 
 // Post-save hook to remove password from response
-userSchema.post("save", function (doc: IUser, next) {
+userSchema.post("save", function (doc: TUser, next) {
   doc.password = "";
   next();
 });
 
 // Exporting the model
-export const User = model<IUser>("User", userSchema);
+export const User = model<TUser>("User", userSchema);

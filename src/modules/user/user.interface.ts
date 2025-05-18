@@ -13,7 +13,6 @@ export interface TUser {
   email: string;
   password: string;
   role: "admin" | "employee" | "job_seeker";
-  company?: Types.ObjectId;
   isDeleted?: boolean;
 }
 
