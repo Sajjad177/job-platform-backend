@@ -152,15 +152,25 @@ A robust backend API built with **Express.js** and **MongoDB** for a job posting
 | POST   | /payment/pay     | Pay for job application  |
 
 
-Payment Flow (Mock)
-```bash
-{
-  "invoiceId": "INV-123456",
-  "userId": "user_id",
-  "amount": 100,
-  "status": "paid",
-  "time": "2025-05-17T09:30:00Z"
-}
-```
-🖼️ ERD Diagram
-📁 assets/erd.png
+
+> 📌 **Payment Flow (Mock)**  
+> Fake payment system implemented.  
+> 🔗 Follow full flow in Postman documentation: [View Postman Docs](https://documenter.getpostman.com/view/36958927/2sB2qXjNMA)  
+>  
+> ✅ Example Payload:
+> ```json
+> {
+>   "invoiceId": "INV-123456",
+>   "userId": "user_id",
+>   "amount": 100,
+>   "status": "paid",
+>   "time": "2025-05-17T09:30:00Z"
+> }
+> ```
+
+
+
+
+
+
+
