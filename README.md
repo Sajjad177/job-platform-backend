@@ -106,6 +106,18 @@ A robust backend API built with **Express.js** and **MongoDB** for a job posting
 | Employee   | Post/edit/delete jobs, view applicants, accept/reject them     |
 | Job Seeker | View jobs, apply with CV & payment, view application history   |
 
+
+
+### ⚙️ Admin Initialization
+
+> ⚠️ **Note**:  
+> A default admin user is **automatically created** when the server starts.  
+> This avoids manually setting `role: admin` in the database every time — which is not a good practice.  
+>  
+> 🧾 **Check implementation in:**  
+> - `DB` ➝ `createAdmin` function  
+> - `server` ➝ invoked during server startup  
+
 ## 📬 API Endpoints
 
 ### 🔐 Auth Routes
