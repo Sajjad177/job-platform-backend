@@ -106,38 +106,51 @@ A robust backend API built with **Express.js** and **MongoDB** for a job posting
 | Employee   | Post/edit/delete jobs, view applicants, accept/reject them     |
 | Job Seeker | View jobs, apply with CV & payment, view application history   |
 
-## 📬 API Endpoints:
-🔐 Auth Routes
-| Method | Endpoint       | Description             |
-| ------ | -------------- | ----------------------- |
-| POST   | /auth/register | Register as Job Seeker  |
-| POST   | /auth/login    | Login and get JWT token |
+## 📬 API Endpoints
 
-Admin Routes
-| Method | Endpoint            | Description              |
-| ------ | ------------------- | ------------------------ |
-| GET    | /admin/users        | Get all users            |
-| PUT    | /admin/users/\:id   | Update user              |
-| DELETE | /admin/users/\:id   | Delete user              |
-| GET    | /admin/jobs         | Get all jobs             |
-| GET    | /admin/applications | Get all job applications |
+### 🔐 Auth Routes
+| Method | Endpoint     | Description          |
+|--------|--------------|----------------------|
+| POST   | /auth/login  | Login and get JWT token |
 
-Employee Routes:
-| Method | Endpoint                    | Description                  |
-| ------ | --------------------------- | ---------------------------- |
-| POST   | /jobs                       | Create new job               |
-| PUT    | /jobs/\:id                  | Edit job                     |
-| DELETE | /jobs/\:id                  | Delete job                   |
-| GET    | /employee/applications      | View applicants              |
-| PUT    | /employee/applications/\:id | Accept or reject application |
+### 👤 User Routes
+| Method | Endpoint                       | Description          |
+|--------|--------------------------------|----------------------|
+| POST   | /user/register                 | Register user        |
+| POST   | /user/create-employee          | Create employee      |
+| GET    | /user                          | Get all users        |
+| GET    | /user/:userId                  | Get single user      |
+| PATCH  | /user/:userId                  | Update user role     |
+| PATCH  | /usersoft-delete/:userId       | Soft delete user     |
 
- Job Seeker Routes
- | Method | Endpoint         | Description                         |
-| ------ | ---------------- | ----------------------------------- |
-| GET    | /jobs            | View all jobs                       |
-| GET    | /jobs/\:id       | View job details                    |
-| POST   | /jobs/\:id/apply | Apply to job (CV upload + 100 Taka) |
-| GET    | /applications/my | View own application history        |
+### 🏢 Company Routes
+| Method | Endpoint           | Description          |
+|--------|--------------------|----------------------|
+| POST   | /company/create    | Create new company   |
+| GET    | /company           | Get all companies    |
+
+### 💼 Job Routes
+| Method | Endpoint                     | Description           |
+|--------|------------------------------|-----------------------|
+| POST   | /job/create-job              | Create new job        |
+| GET    | /job                         | Get all jobs          |
+| GET    | /job/my-posted-jobs         | Get own posted jobs   |
+| PUT    | /job/:jobId                  | Update job            |
+| PATCH  | /job/deleted/:jobId          | Soft delete job       |
+
+### 📄 Applications Routes
+| Method | Endpoint                             | Description                |
+|--------|--------------------------------------|----------------------------|
+| POST   | /application/apply                   | Apply to a job             |
+| GET    | /application                         | Get all applications       |
+| GET    | /application/my-applications         | Get own applications       |
+| PUT    | /applicationId/:applicationId        | Update application status  |
+
+### 💳 Payment Routes
+| Method | Endpoint        | Description              |
+|--------|------------------|--------------------------|
+| POST   | /payment/pay     | Pay for job application  |
+
 
 Payment Flow (Mock)
 ```bash
