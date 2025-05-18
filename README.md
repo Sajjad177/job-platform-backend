@@ -133,7 +133,7 @@ A robust backend API built with **Express.js** and **MongoDB** for a job posting
 | GET    | /user                          | Get all users        |
 | GET    | /user/:userId                  | Get single user      |
 | PATCH  | /user/:userId                  | Update user role     |
-| PATCH  | /usersoft-delete/:userId       | Soft delete user     |
+| PATCH  | /user/soft-delete/:userId       | Soft delete user     |
 
 ### 🏢 Company Routes
 | Method | Endpoint           | Description          |
