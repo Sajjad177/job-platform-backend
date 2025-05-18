@@ -99,6 +99,9 @@ A robust backend API built with **Express.js** and **MongoDB** for a job posting
      ```bash
      npm run start:dev
      ```
+     Note: also check package.json -> scripts
+
+     
 ## 👥 User Roles & Permissions
 | Role       | Permissions                                                    |
 | ---------- | -------------------------------------------------------------- |
