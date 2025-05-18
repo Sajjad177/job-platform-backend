@@ -16,7 +16,8 @@ const createJob = catchAsync(async (req, res) => {
 });
 
 const getAllJobs = catchAsync(async (req, res) => {
-  const result = await jobService.getAllJobs();
+  const company = req.query.company as string | undefined;
+  const result = await jobService.getAllJobs({ company });
 
   sendResonse(res, {
     statusCode: StatusCodes.OK,

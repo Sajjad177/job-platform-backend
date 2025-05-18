@@ -47,13 +47,52 @@ const createJobInDB = async (payload: TJob, userId: string) => {
   return result;
 };
 
-const getAllJobs = async () => {
-  const result = await Job.find({ isDeleted: false })
-    .populate("company")
-    .populate({
-      path: "postedBy",
-      select: "-password",
+const getAllJobs = async (filter: { company?: string }) => {
+  const aggregationPipeline: any[] = [
+    {
+      $match: {
+        isDeleted: false,
+      },
+    },
+    {
+      $lookup: {
+        from: "companies", // collection name, make sure it's correct
+        localField: "company",
+        foreignField: "_id",
+        as: "company",
+      },
+    },
+    {
+      $unwind: "$company",
+    },
+    {
+      $lookup: {
+        from: "users", // assuming postedBy refers to users
+        localField: "postedBy",
+        foreignField: "_id",
+        as: "postedBy",
+      },
+    },
+    {
+      $unwind: "$postedBy",
+    },
+    {
+      $project: {
+        "postedBy.password": 0,
+      },
+    },
+  ];
+
+  // If filtering by company name
+  if (filter.company) {
+    aggregationPipeline.push({
+      $match: {
+        "company.name": { $regex: filter.company, $options: "i" }, // case-insensitive match
+      },
     });
+  }
+
+  const result = await Job.aggregate(aggregationPipeline);
   return result;
 };
 
@@ -68,13 +107,11 @@ const updateJobInDB = async (jobId: string, payload: TJob, userId: string) => {
     throw new AppError("Job not found", StatusCodes.NOT_FOUND);
   }
 
-  const checkJob = await Job.findOne({ isDeleted: true });
-  if (checkJob) {
+  if (isExist.isDeleted) {
     throw new AppError("Job already deleted", StatusCodes.CONFLICT);
   }
 
   const employeeId = isExist.postedBy.toString();
-  //   const companyId = isExist.company.toString();
 
   if (employeeId !== userId) {
     throw new AppError(
@@ -97,11 +134,6 @@ const deleteJobFromDB = async (
   const isExist = await Job.findById(jobId);
   if (!isExist) {
     throw new AppError("Job not found", StatusCodes.NOT_FOUND);
-  }
-
-  const checkJob = await Job.findOne({ isDeleted: true });
-  if (checkJob) {
-    throw new AppError("Job already deleted", StatusCodes.CONFLICT);
   }
 
   const employeeId = isExist.postedBy.toString();

@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import catchAsync from "../../utils/catchAsync";
 import sendResonse from "../../utils/sendResponse";
-import { paymentService } from "./palyment.service";
+import { paymentService } from "./payment.service";
 
 const initiatePayment = catchAsync(async (req, res) => {
   const { userId } = req.user;
